@@ -9,7 +9,7 @@
 
 - 👨‍💻 All of my projects are available at [in private repositories,😂😂😂😂😂. Old account credentials lost so bit left.😔😔😔😔😔😔](in private repositories,😂😂😂😂😂. Old account credentials lost so bit left.😔😔😔😔😔😔)
 
-- 📫 How to reach me **mngemo@gmail.com**
+- 📫 How to reach me **mngrmo@gmail.com**
 
 - ⚡ Fun fact **I am a great listener.😁😁😁😁😁😁**
 
