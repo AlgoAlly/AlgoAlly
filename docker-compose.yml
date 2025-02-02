@@ -1,0 +1,20 @@
+version: '3'
+services:
+  frontend:
+    build: .
+    # stdin_open: true
+    # tty: true
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    
+    # watch:
+    #   - action: sync
+    #     path: .
+    #     target: /app
+    #     ignore:
+    #       - node_modules/
+    #   - action: rebuild
+    #     path: ./package.json
