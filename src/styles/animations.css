@@ -1,0 +1,20 @@
+@keyframes marquee-hover {
+    from {
+      transform: translateX(0%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .animate-marquee-hover {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateX(0%);
+  }
+  
+  .animate-marquee-hover:hover {
+    animation: marquee-hover 8s linear infinite;
+  }
+  
