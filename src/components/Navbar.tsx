@@ -6,25 +6,25 @@ const Navbar: React.FC = () => {
 <nav className="flex space-x-[161px] pl-30 items-center">
       <NavLink
         to="/problems"
-        className="text-[#EEEFFC] text-[24px] hover:text-blue-500 hover:font-bold"
+        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
       >
         Problems
       </NavLink>
       <NavLink
         to="/friends"
-        className="text-[#EEEFFC] text-[24px] hover:text-blue-500 hover:font-bold"
+        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
       >
         Friends
       </NavLink>
       <NavLink
         to="/about"
-        className="text-[#EEEFFC] text-[24px] hover:text-blue-500 hover:font-bold"
+        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
       >
         About
       </NavLink>
       <NavLink
         to="/home"
-        className="text-[#EEEFFC] text-[24px] hover:text-blue-500 hover:font-bold"
+        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
       >
         Home
       </NavLink>
