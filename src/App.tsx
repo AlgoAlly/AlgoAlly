@@ -5,10 +5,12 @@ import { Route, Routes } from "react-router-dom";
 import Profile from "./pages/Profile";
 import Problems from "./pages/Problems";
 import Login from "./pages/Login";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <>
+      <Navbar />
       <Routes>
         <Route path="/profile" element={<Profile />} />
         <Route path="/problems" element={<Problems />} />

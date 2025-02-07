@@ -27,14 +27,14 @@ const Login = () => {
     <>
       {/* Go Back Button -> redirect to / */}
       <Button
-        className="text-s absolute top-4 right-4 py-3!"
+        className="text-s absolute top right-4 py-3"
         variant="primary"
         onClick={() => navigate('/')}
       >
         Go Back →
       </Button>
       {/* Container for login menu */}
-      <div className="relative flex h-full w-full flex-col items-center justify-center">
+      <div className="relative flex h-full w-1/4 flex-col items-center justify-center mx-auto mt-10">
         <h1 className="mb-6 text-4xl font-bold">Login to AlgoAlly</h1>
         <div className="flex w-full flex-col">
           {/* Username input field */}
