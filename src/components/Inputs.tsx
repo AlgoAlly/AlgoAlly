@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-// import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Button from './Button';
 
 const Inputs = () => {
