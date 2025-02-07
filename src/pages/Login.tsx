@@ -1,4 +1,5 @@
 import 'react';
+import axios from 'axios';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { useState } from 'react';
@@ -20,7 +21,20 @@ const Login = () => {
       return;
     }
 
-    alert('Login successful!');
+    axios.post('http://localhost:14010/login', { username, password })
+      .then(response => {
+        if (response.status === 200) {
+          alert('Login successful!');
+          navigate('/home');
+        }
+      })
+      .catch(error => {
+        console.error("Login Error:", error);
+        alert(error.response?.data?.message || 'Login failed');
+      })
+      .finally(() => {
+        console.log("foo");
+      });
   };
 
   return (
