@@ -1,5 +1,4 @@
 import "react";
-import Navbar from '../components/Navbar'
 import Inputs from '../components/Inputs'
 import Progress from '../components/progress'
 
