@@ -44,16 +44,15 @@ const Inputs = () => {
   };
 
   return (
-    <div>
-    <div className="absolute top-54.5 left-80">
+    <div className="flex flex-col space-y-6.5">
+    <div className="flex space-x-6">
       <input
         type="text"
         value={firstName}
         onChange={(e) => setFirstName(e.target.value)}
         placeholder="First Name"
         className="w-64 p-2 border border-[#393A4B] rounded-lg placeholder-text-secondary placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"      />
-    </div>
-    <div className="absolute top-54.5 left-150">
+
       <input
         type="text"
         value={lastName}
@@ -61,31 +60,30 @@ const Inputs = () => {
         placeholder="Last Name"
         className="w-64 p-2 border border-[#393A4B] rounded-lg placeholder-text-secondary placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"      />
     </div>
-    <div className="absolute top-72 left-80">
+
       <input
         type="text"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         className="w-134 p-2 border border-[#393A4B] rounded-lg placeholder-text-secondary placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"      />
-    </div>
-    <div className="absolute top-91.5 left-80">
+
       <input
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
         className="w-134 p-2 border border-[#393A4B] rounded-lg placeholder-text-secondary placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"      />
-    </div>
-    <div className="absolute top-108 left-80" ref={dropdownRef}>
+
+    <div className="relative w-72" ref={dropdownRef}>
     <button 
   onClick={() => setIsOpen((prev) => !prev)}
   className="w-70 p-2 border border-[#393A4B] text-left pl-3 rounded-lg placeholder-text-secondary text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] caret-white focus:shadow-[0_0_0_2px_black] cursor-pointer flex justify-between items-center"
 >
   <span className="text-secondary">{selectedCountry}</span>
-  {/* <ChevronDownIcon
+  { <ChevronDownIcon
     className={`w-5 h-5 text-white ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
-  /> */}
+  /> }
 
         </button>
         {isOpen && (
@@ -105,16 +103,14 @@ const Inputs = () => {
           </ul>
         )}
       </div>
-      <div className="absolute top-130 left-20">
       <Button
-          className="px-7 py-3.5 font-bold text-[20px] rounded-lg cursor-pointer" 
+          className="w-fit px-7 py-3.5 font-bold text-[20px] rounded-lg cursor-pointer" 
           variant="primary"
           onClick={() => submit()}
         >
           Confirm
         </Button>
       </div>
-</div>
     
   );
 };
