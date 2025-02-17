@@ -13,7 +13,6 @@ const Profile = () => {
             <h2  className="text-[#D2D3E0] text-[20px] font-medium">First & Last Name</h2>
             <h3  className="text-[#D2D3E0] text-[20px] font-medium">Email</h3>
             <h4  className="text-[#D2D3E0] text-[20px] font-medium">Username</h4>
-            <h5  className="text-[#858699] text-[12px] font-medium">You can change this later</h5>
             <h6  className="text-[#D2D3E0] text-[20px] font-medium">Country</h6>
         </div>
         
