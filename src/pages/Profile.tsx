@@ -5,10 +5,9 @@ import Progress from '../components/progress'
 
 const Profile = () => {
   return <div className='bg-[#191A23] min-h-screen'>
-    <Navbar></Navbar>
     <div className="border border-zinc-400 p-6 rounded-xl bg-[#1f2136] mx-auto max-w-5xl flex mt-10">
 
-        <div>
+      <div className="space-y-10">
             <h1 className="text-[#D2D3E0] text-[36px] font-bold">Account</h1>
             <h2  className="text-[#D2D3E0] text-[20px] font-medium">First & Last Name</h2>
             <h3  className="text-[#D2D3E0] text-[20px] font-medium">Email</h3>
