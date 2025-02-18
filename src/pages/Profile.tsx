@@ -1,6 +1,6 @@
 import "react";
 import Inputs from '../components/Inputs'
-import Progress from '../components/progress'
+import Progress from '../components/Progress';
 
 const Profile = () => {
   return <div className='bg-[#191A23] min-h-screen'>
