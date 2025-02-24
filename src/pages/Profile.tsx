@@ -1,9 +1,11 @@
 import "react";
 import Inputs from '../components/Inputs'
-import Progress from '../components/progress'
+import Progress from '../components/Progress'
+import Navbar from "../components/Navbar";
 
 const Profile = () => {
   return <div className='bg-[#191A23] min-h-screen'>
+          <Navbar/>
     <div className="border border-zinc-400 p-6 rounded-xl bg-[#1f2136] mx-auto max-w-5xl flex mt-10">
 
       <div className="space-y-10">
