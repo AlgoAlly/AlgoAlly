@@ -55,7 +55,7 @@ const Chatroom = () => {
       <ul>
         <li>
       <button
-          className="py-2 px-4 hover:bg-gray-200 rounded-md cursor-pointer" 
+          className="py-2 px-4 text-black hover:bg-gray-200 rounded-md cursor-pointer" 
           onClick={() => openMessage("Person 1")}
         >
           Person 1
@@ -63,7 +63,7 @@ const Chatroom = () => {
         </li>
         <li>
       <button
-          className="py-2 px-4 hover:bg-gray-200 rounded-md cursor-pointer" 
+          className="py-2 px-4 text-black hover:bg-gray-200 rounded-md cursor-pointer" 
           onClick={() => openMessage("Person 2")}
         >
           Person 2
@@ -71,7 +71,7 @@ const Chatroom = () => {
         </li>
         <li>
       <button
-          className="py-2 px-4 hover:bg-gray-200 rounded-md cursor-pointer" 
+          className="py-2 px-4 text-black hover:bg-gray-200 rounded-md cursor-pointer" 
           onClick={() => openMessage("Person 3")}
         >
           Person 3
@@ -79,7 +79,7 @@ const Chatroom = () => {
         </li>
         <li>
       <button
-          className="py-2 px-4 hover:bg-gray-200 rounded-md cursor-pointer" 
+          className="py-2 px-4 text-black hover:bg-gray-200 rounded-md cursor-pointer" 
           onClick={() => openMessage("Person 4")}
         >
           Person 4
@@ -87,7 +87,7 @@ const Chatroom = () => {
         </li>
         <li>
       <button
-          className="py-2 px-4 hover:bg-gray-200 rounded-md cursor-pointer" 
+          className="py-2 px-4 text-black hover:bg-gray-200 rounded-md cursor-pointer" 
           onClick={() => openMessage("Person 5")}
         >
           Person 5
@@ -110,7 +110,7 @@ const Chatroom = () => {
       </div> */}
       {messages[messageName].map(msg => (
         <div className="flex items-start justify-end mb-4 mr-4">
-          <div className="bg-blue-400 rounded-lg p-3 shadow-sm">
+          <div className="bg-blue-400 text-black rounded-lg p-3 shadow-sm">
             {msg.text}
           </div>
         </div>
