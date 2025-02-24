@@ -10,7 +10,6 @@ import Navbar from "./components/Navbar";
 function App() {
   return (
     <>
-      <Navbar/>
       <Routes>
         <Route path="/profile" element={<Profile />} />
         <Route path="/problems" element={<Problems />} />
