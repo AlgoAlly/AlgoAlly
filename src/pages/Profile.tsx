@@ -2,6 +2,7 @@ import "react";
 import Inputs from '../components/Inputs'
 import Progress from '../components/Progress'
 import Navbar from "../components/Navbar";
+import Chatroom from "../components/Chatroom";
 
 const Profile = () => {
   return <div className='bg-[#191A23] min-h-screen'>
@@ -24,6 +25,9 @@ const Profile = () => {
 </div>
 <div className="w-fit mx-auto pt-20">
       <Progress />
+      </div>
+      <div className="fixed bottom-0 right-40 z-50">
+        <Chatroom />
       </div>
     </div>
 }
