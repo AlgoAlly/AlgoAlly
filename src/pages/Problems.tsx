@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "../styles/animations.css";
 
 const problems = [
@@ -10,31 +11,8 @@ const problems = [
 ];
 
 const ProblemList: React.FC = () => {
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Easy":
-        return "text-green-400";
-      case "Medium":
-        return "text-yellow-400";
-      case "Hard":
-        return "text-red-400";
-      default:
-        return "text-gray-400";
-    }
-  };
+  const navigate = useNavigate(); // Initialize React Router navigation
 
-import React from "react";
-import "../styles/animations.css";
-
-const problems = [
-  { id: 1, name: "Two Sum", difficulty: "Easy", solveRate: "63.9%" },
-  { id: 2, name: "Add Two Numbers", difficulty: "Medium", solveRate: "54.8%" },
-  { id: 3, name: "Longest Substring Without Repeating Characters", difficulty: "Medium", solveRate: "45.2%" },
-  { id: 4, name: "Median of Two Sorted Arrays", difficulty: "Hard", solveRate: "36.1%" },
-  { id: 5, name: "Longest Palindromic Substring", difficulty: "Medium", solveRate: "42.6%" },
-];
-
-const ProblemList: React.FC = () => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Easy":
@@ -61,15 +39,16 @@ const ProblemList: React.FC = () => {
         </div>
         {/* Problem Rows */}
         {problems.map((problem) => (
-          <div
+          <button
             key={problem.id}
-            className="grid grid-cols-4 gap-4 px-6 py-2 bg-gray-800 border-b border-gray-700 hover:bg-gray-700 transition rounded-md shadow-sm"
+            className="grid grid-cols-4 gap-4 px-6 py-2 bg-gray-800 border-b border-gray-700 hover:bg-gray-700 transition rounded-md shadow-sm text-left w-full"
+            onClick={() => navigate(`/problem/${problem.id}`)} // Navigate on click
           >
             {/* ID */}
-            <span className="text-left text-gray-300">{problem.id}.</span>
+            <span className="text-gray-300">{problem.id}.</span>
 
             {/* Problem Name with Scrolling Animation */}
-            <div className="text-left text-gray-200 overflow-hidden">
+            <div className="text-gray-200 overflow-hidden">
               <div className="inline-block animate-marquee-hover">
                 {problem.name}
               </div>
@@ -79,14 +58,10 @@ const ProblemList: React.FC = () => {
             <span className="text-center text-purple-400">{problem.solveRate}</span>
 
             {/* Difficulty */}
-            <span
-              className={`text-center font-bold ${getDifficultyColor(
-                problem.difficulty
-              )}`}
-            >
+            <span className={`text-center font-bold ${getDifficultyColor(problem.difficulty)}`}>
               {problem.difficulty}
             </span>
-          </div>
+          </button>
         ))}
       </div>
     </div>
