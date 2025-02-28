@@ -3,7 +3,6 @@ import { useState } from "react";
 import { ChevronUpIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 
-
 const Chatroom = () => {
 
     const [sendMessage, setsendMessage] = useState("")
