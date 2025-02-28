@@ -1,6 +1,7 @@
 import "react";
 import Progress from '../components/Progress'
 import Navbar from "../components/Navbar";
+import Chatroom from "../components/Chatroom";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Button from '../components/Button';
