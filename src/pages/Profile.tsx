@@ -1,6 +1,7 @@
 import "react";
 import Progress from '../components/Progress'
 import Navbar from "../components/Navbar";
+import Chatroom from "../components/Chatroom";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Button from '../components/Button';
@@ -134,6 +135,9 @@ const Profile = () => {
 </div>
 <div className="w-fit mx-auto pt-20">
       <Progress />
+      </div>
+      <div className="fixed bottom-0 right-40 z-50">
+        <Chatroom />
       </div>
     </div>
   );
