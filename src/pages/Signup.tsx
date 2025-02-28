@@ -4,12 +4,12 @@ import Input from '../components/Input';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const login = () => {
+  const signup = () => {
     if (username === '' || password === '') {
       alert('Please fill in all fields');
       return;
@@ -20,7 +20,10 @@ const Login = () => {
       return;
     }
 
-    alert('Login successful!');
+    // TODO make signup request
+
+    // redirect to /
+    navigate('/');
   };
 
   return (
@@ -33,10 +36,10 @@ const Login = () => {
       >
         Go Back →
       </Button>
-      {/* Container for login menu */}
+      {/* Container for signup menu */}
       <div className="flex flex-col items-center">
         <div className="relative flex h-full w-full flex-col items-center justify-center">
-          <h1 className="mb-6 text-4xl font-bold">Login to AlgoAlly</h1>
+          <h1 className="mb-6 text-4xl font-bold">Signup to AlgoAlly</h1>
           <div className="flex w-full flex-col">
             {/* Username input field */}
             <label className="text-input-label mb-1.5 pl-1 text-sm">
@@ -62,18 +65,18 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {/* Login/submit button, will send request to login */}
+          {/* Signup/submit button, will send request to signup */}
           <Button
             className="mt-11 h-10 w-full"
             variant="secondary"
-            onClick={() => login()}
+            onClick={() => signup()}
           >
-            Login
+            Signup
           </Button>
           <p className="text-s mt-2">
-            Don't have an account?{' '}
+            Already have an account?{' '}
             <a href="/signup" className="text-primary font-bold">
-              Sign up now
+              Login now
             </a>
           </p>
         </div>
@@ -82,4 +85,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
