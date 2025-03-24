@@ -32,7 +32,7 @@ const problems = [
     Search For A Friend
   </button>
 </div>
-<h1>Friend List</h1>
+<h2 className="text-3xl font-bold mb-6 mt-6">Your Friends List:</h2>
 <div
             
             className="grid grid-cols-4 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active"
