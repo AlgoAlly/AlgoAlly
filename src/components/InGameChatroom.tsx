@@ -163,10 +163,10 @@ const InGameChatroom = () => {
 {messages.map((msg, index) => (
   <div 
     key={index} 
-    className={`mb-4 ${msg.sender === "currentUser" ? 'text-right' : 'text-left'}`}
+    className={`mb-4 ${msg.sender === localStorage.getItem('username') ? 'text-right' : 'text-left'}`}
   >
     <div className={`inline-block p-3 rounded-lg shadow-sm ${
-      msg.sender === "currentUser" 
+      msg.sender === localStorage.getItem('username') 
         ? 'bg-blue-600 text-white' 
         : 'bg-gray-700 text-white'
     }`}>
@@ -174,7 +174,7 @@ const InGameChatroom = () => {
       <p className="mt-1">{msg.content}</p>
     </div>
     <small className={`block mt-1 text-gray-300 ${
-      msg.sender === "currentUser" ? 'text-right' : 'text-left'
+      msg.sender === localStorage.getItem('username') ? 'text-right' : 'text-left'
     }`}>
       {new Date(msg.timestamp).toLocaleTimeString()}
     </small>
