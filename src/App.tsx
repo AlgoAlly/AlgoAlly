@@ -6,7 +6,7 @@ import Profile from './pages/Profile';
 import Problems from './pages/Problems';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Navbar from "./components/Navbar";
+import Workspace from './pages/Workspace';
 
 function App() {
   return (
@@ -16,6 +16,8 @@ function App() {
         <Route path="/problems" element={<Problems />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/workspace" element={<Workspace />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </>
   );
