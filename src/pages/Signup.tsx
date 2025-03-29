@@ -27,7 +27,7 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <>
       {/* Go Back Button -> redirect to / */}
       <Button
         className="text-s absolute top-4 right-4 py-3!"
@@ -81,7 +81,7 @@ const Signup = () => {
           </p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
