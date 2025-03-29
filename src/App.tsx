@@ -7,6 +7,7 @@ import Problems from './pages/Problems';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Workspace from './pages/Workspace';
+import Home from './pages/Home';
 
 function App() {
   return (
