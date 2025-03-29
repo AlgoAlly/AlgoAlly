@@ -23,7 +23,7 @@ const InGameChatroom = () => {
                 onClick={toggleBox}
                 className="w-100 p-2 border border-[#393A4B] text-left pl-3 rounded-sm bg-[#151621] text-white focus:outline-none flex justify-between items-center cursor-pointer"
             >
-                {"Message a friend"}
+                {"Open Chatroom"}
                 <ChevronUpIcon
                     className={`w-5 h-5 text-white ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
                 />
