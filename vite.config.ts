@@ -26,4 +26,5 @@ export default defineConfig({
       '@': root,
     },
   },
+  envDir: '.', // Ensure Vite looks for the `.env` file in the root directory
 });

@@ -20,11 +20,54 @@ const Login = () => {
       return;
     }
 
-    alert('Login successful!');
+    // send API request to login
+    // get login host and port from environment variables
+    const host = import.meta.env.VITE_USER_API_HOST || 'http://127.0.0.1';
+    const port = import.meta.env.VITE_USER_API_PORT || '14010';
+    const url = `${host}:${port}/login`;
+    const data = {
+      username: username,
+      password: password,
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          // get the JWT and place it in local storage
+          response.json().then((data) => {
+            localStorage.setItem('accessToken', data.accessToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('username', username);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('isLoggedIn', 'true');
+            navigate('/');
+          });
+        } else {
+          // highlight the input fields red
+          setUsername('');
+          setPassword('');
+          // alert('Invalid username or password');
+          document.querySelectorAll('input').forEach((input) => {
+            input.style.outlineColor = 'red';
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        document.querySelectorAll('input').forEach((input) => {
+          input.style.outlineColor = 'red';
+        });
+      });
   };
 
   return (
-    <div>
+    <>
       {/* Go Back Button -> redirect to / */}
       <Button
         className="text-s absolute top-4 right-4 py-3!"
@@ -78,7 +121,7 @@ const Login = () => {
           </p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

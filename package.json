@@ -19,6 +19,8 @@
     "@tailwindcss/vite": "^4.0.3",
     "@uiw/codemirror-theme-atomone": "^4.23.8",
     "@uiw/react-codemirror": "^4.23.8",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
