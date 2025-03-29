@@ -6,7 +6,7 @@ import { ChevronUpIcon, XMarkIcon } from "@heroicons/react/24/solid";
 interface ChatMessage {
   sender: string;
   content: string;
-  timestamp: string; // ISO date string (or you can store a Date)
+  timestamp: string; // ISO date string
 }
 
 const InGameChatroom = () => {
@@ -14,13 +14,12 @@ const InGameChatroom = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const clientRef = useRef<Client | null>(null);
+  const lastMessageRef = useRef<HTMLDivElement | null>(null); // Reference for last message
 
-  // Toggle the chatbox open/closed.
   const toggleBox = () => {
     setIsOpen(!isOpen);
-};
+  };
 
-  // Handle Enter key to send messages.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && sendMessageText.trim() !== "") {
       sendMessage();
@@ -29,56 +28,51 @@ const InGameChatroom = () => {
 
   async function fetchChatHistory() {
     try {
-      const response = await fetch(
-        "/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Include JWT
-          },
-        }
-      );
-  
+      const response = await fetch("/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+
       if (!response.ok) {
         throw new Error("Failed to fetch chat history");
       }
-  
+
       const history: ChatMessage[] = await response.json();
       setMessages(history);
     } catch (e) {
       console.error("Failed to load chat history:", e);
     }
   }
-  
 
-  // Publish the message to the backend.
   const sendMessage = () => {
     if (!clientRef.current) return;
 
     const message = {
       content: sendMessageText,
-      sender: localStorage.getItem('username'),
+      sender: localStorage.getItem("username"),
       timestamp: new Date().toISOString(),
     };
 
     clientRef.current.publish({
       destination: "/app/chat.sendMessage",
-      headers: { matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-       },
+      headers: {
+        matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       body: JSON.stringify(message),
     });
 
     setSendMessageText("");
   };
 
-  
   useEffect(() => {
-    // Create the STOMP client with SockJS as the underlying transport.
     const client = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8083/ws"),
-      connectHeaders: { matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
-       },
+      connectHeaders: {
+        matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       debug: (str) => console.debug("STOMP:", str),
       reconnectDelay: 5000,
     });
@@ -86,55 +80,51 @@ const InGameChatroom = () => {
     client.onConnect = () => {
       console.log("WebSocket Connected");
 
-      // Subscribe to new chat messages.
-      client.subscribe(
-        "/topic/chatroom.3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
-        (message) => {
-          try {
-            const msg: ChatMessage = JSON.parse(message.body);
-            setMessages((prev) => [...prev, msg]);
-          } catch (error) {
-            console.error("Error parsing message:", error);
-          }
+      client.subscribe("/topic/chatroom.3419c27a-a25b-4437-ad7b-7f73eb48e8ba", (message) => {
+        try {
+          const msg: ChatMessage = JSON.parse(message.body);
+          setMessages((prev) => [...prev, msg]);
+        } catch (error) {
+          console.error("Error parsing message:", error);
         }
-        
-      );
+      });
 
-      // Subscribe to acknowledgements (if needed).
       client.subscribe("/queue/ack", (message) => {
         try {
           const ackMsg = JSON.parse(message.body);
           console.log("Acknowledgement:", ackMsg);
-          // You can show an in-app notification temporarily if desired.
         } catch (error) {
           console.error("Error parsing ack:", error);
         }
       });
 
       fetchChatHistory();
-
     };
 
     client.onWebSocketError = (error) => {
       console.error("WebSocket Error:", error);
-      // Optionally, update a state variable to display an error message.
     };
 
     client.onStompError = (frame) => {
       console.error("STOMP Error:", frame.headers.message);
-      // Optionally handle protocol errors.
     };
 
     client.activate();
     clientRef.current = client;
 
-    // Cleanup on unmount: deactivate the client.
     return () => {
       if (clientRef.current) {
         clientRef.current.deactivate();
       }
     };
   }, []);
+
+  // Auto-scroll whenever messages change
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <div>
@@ -143,9 +133,7 @@ const InGameChatroom = () => {
         className="w-100 p-2 border border-[#393A4B] text-left pl-3 rounded-sm bg-[#151621] text-white focus:outline-none flex justify-between items-center cursor-pointer"
       >
         {isOpen ? "Close Chatroom" : "Open Chatroom"}
-        <ChevronUpIcon
-          className={`w-5 h-5 text-white ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`}
-        />
+        <ChevronUpIcon className={`w-5 h-5 text-white ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
 
       {isOpen && (
@@ -156,32 +144,22 @@ const InGameChatroom = () => {
               <XMarkIcon className="w-8 h-8 cursor-pointer" />
             </button>
           </div>
-          <div
-            id="chatMessages"
-            className="flex flex-col h-96 overflow-y-auto w-full"
-          >
-{messages.map((msg, index) => (
-  <div 
-    key={index} 
-    className={`mb-4 ${msg.sender === localStorage.getItem('username') ? 'text-right' : 'text-left'}`}
-  >
-    <div className={`inline-block p-3 rounded-lg shadow-sm ${
-      msg.sender === localStorage.getItem('username') 
-        ? 'bg-blue-600 text-white' 
-        : 'bg-gray-700 text-white'
-    }`}>
-      <span className="text-sm font-semibold">{msg.sender}</span>
-      <p className="mt-1">{msg.content}</p>
-    </div>
-    <small className={`block mt-1 text-gray-300 ${
-      msg.sender === localStorage.getItem('username') ? 'text-right' : 'text-left'
-    }`}>
-      {new Date(msg.timestamp).toLocaleTimeString()}
-    </small>
-  </div>
-))}
-
-            
+          <div id="chatMessages" className="flex flex-col h-96 overflow-y-auto w-full">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                ref={index === messages.length - 1 ? lastMessageRef : null} // Attach ref to last message
+                className={`mb-4 ${msg.sender === localStorage.getItem("username") ? "text-right" : "text-left"}`}
+              >
+                <div className={`inline-block p-3 rounded-lg shadow-sm ${msg.sender === localStorage.getItem("username") ? "bg-blue-600 text-white" : "bg-gray-700 text-white"}`}>
+                  <span className="text-sm font-semibold">{msg.sender}</span>
+                  <p className="mt-1">{msg.content}</p>
+                </div>
+                <small className={`block mt-1 text-gray-300 ${msg.sender === localStorage.getItem("username") ? "text-right" : "text-left"}`}>
+                  {new Date(msg.timestamp).toLocaleTimeString()}
+                </small>
+              </div>
+            ))}
           </div>
           <input
             type="text"
