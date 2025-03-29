@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
           {links.map(({ name, path }) => (
             <NavLink
               to={path}
-              className="text-primary hover:text-primary-hover text-[18px] hover:font-bold"
+              className="text-[18px] text-primary hover:font-bold hover:text-primary-hover"
             >
               {name}
             </NavLink>
@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
             </>
           ) : (
             <>
-              <div className="text-primary text-[18px]">
+              <div className="text-[18px] text-primary">
                 {`Welcome, ${localStorage.getItem('username')}`}
               </div>
               <Button
