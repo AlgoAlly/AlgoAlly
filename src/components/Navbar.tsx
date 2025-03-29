@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import Logo from '../public/logo.svg?react';
+import { sendAuthenticatedRequest } from '../util/util';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +12,23 @@ const Navbar: React.FC = () => {
     { name: 'Friends', path: '/friends' },
     { name: 'About', path: '/about' },
   ];
+
+  const logout = () => {
+    // revoke the current refresh token
+    sendAuthenticatedRequest(
+      `${import.meta.env.VITE_USER_API_HOST}:${import.meta.env.VITE_USER_API_PORT}/logout`,
+      'POST',
+      localStorage.getItem('username')
+        ? { username: localStorage.getItem('username') }
+        : null
+    );
+
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('isLoggedIn');
+  };
 
   return (
     <header className="border-border-primary sticky top-0 z-20 h-fit w-full items-center justify-between space-x-[161px] border-b p-4">
@@ -26,13 +44,42 @@ const Navbar: React.FC = () => {
             </NavLink>
           ))}
         </div>
-        <Button
-          className="h-10"
-          variant="primary"
-          onClick={() => navigate('/login')}
-        >
-          Login
-        </Button>
+        <div className="flex flex-row items-center space-x-4">
+          {localStorage.getItem('isLoggedIn') != 'true' ? (
+            <>
+              <Button
+                className="h-10"
+                variant="primary"
+                onClick={() => navigate('/signup')}
+              >
+                Sign Up
+              </Button>
+              <Button
+                className="h-10"
+                variant="primary"
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="text-primary text-[18px]">
+                {`Welcome, ${localStorage.getItem('username')}`}
+              </div>
+              <Button
+                className="h-10"
+                variant="primary"
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          )}
+        </div>
       </nav>
     </header>
   );

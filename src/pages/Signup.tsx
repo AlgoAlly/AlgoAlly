@@ -1,6 +1,7 @@
 import 'react';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +10,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const signup = () => {
+  const signup = async () => {
     if (username === '' || password === '') {
       alert('Please fill in all fields');
       return;
@@ -20,10 +21,76 @@ const Signup = () => {
       return;
     }
 
-    // TODO make signup request
+    try {
+      const host = import.meta.env.VITE_USER_API_HOST || 'http://localhost';
+      const port = import.meta.env.VITE_USER_API_PORT || '14010';
 
-    // redirect to /
-    navigate('/');
+      const response = await axios.post(
+        `${host}:${port}/user/create`,
+        {
+          username: username,
+          password: password,
+          email: username,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          validateStatus: (_status) => {
+            return true;
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        // highlight the input fields red
+        setUsername('');
+        setPassword('');
+        alert(response.data);
+        document.querySelectorAll('input').forEach((input) => {
+          input.style.outlineColor = 'red';
+        });
+        return;
+      }
+
+      const loginResponse = await axios.post(
+        `${host}:${port}/login`,
+        {
+          username: username,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (loginResponse.status !== 200) {
+        // highlight the input fields red
+        setUsername('');
+        setPassword('');
+        document.querySelectorAll('input').forEach((input) => {
+          input.style.outlineColor = 'red';
+        });
+        return;
+      }
+
+      localStorage.setItem('accessToken', loginResponse.data.accessToken);
+      localStorage.setItem('refreshToken', loginResponse.data.refreshToken);
+      localStorage.setItem('username', username);
+      localStorage.setItem('userId', loginResponse.data.userId);
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate('/');
+
+      // authenticate the user
+    } catch (error) {
+      console.error('Error during signup:', error);
+      document.querySelectorAll('input').forEach((input) => {
+        input.style.outlineColor = 'red';
+      });
+    }
   };
 
   return (
@@ -75,7 +142,7 @@ const Signup = () => {
           </Button>
           <p className="text-s mt-2">
             Already have an account?{' '}
-            <a href="/signup" className="text-primary font-bold">
+            <a href="/login" className="text-primary font-bold">
               Login now
             </a>
           </p>
