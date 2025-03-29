@@ -1,10 +1,10 @@
 import 'react';
 import Progress from '../components/Progress';
 import Navbar from '../components/Navbar';
-import Chatroom from '../components/Chatroom';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Button from '../components/Button';
+import InGameChatroom from '../components/InGameChatroom';
 
 const Profile = () => {
   const [firstName, setFirstName] = useState('');
@@ -151,7 +151,7 @@ const Profile = () => {
         <Progress />
       </div>
       <div className="fixed right-40 bottom-0 z-50">
-        <Chatroom />
+        <InGameChatroom />
       </div>
     </div>
   );
