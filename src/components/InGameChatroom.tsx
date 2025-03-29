@@ -27,30 +27,58 @@ const InGameChatroom = () => {
     }
   };
 
+  async function fetchChatHistory() {
+    try {
+      const response = await fetch(
+        "/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Include JWT
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch chat history");
+      }
+  
+      const history: ChatMessage[] = await response.json();
+      setMessages(history);
+    } catch (e) {
+      console.error("Failed to load chat history:", e);
+    }
+  }
+  
+
   // Publish the message to the backend.
   const sendMessage = () => {
     if (!clientRef.current) return;
 
     const message = {
       content: sendMessageText,
-      sender: "notAnon", // Replace with the logged-in username when available.
+      sender: localStorage.getItem('username'),
       timestamp: new Date().toISOString(),
     };
 
     clientRef.current.publish({
       destination: "/app/chat.sendMessage",
-      headers: { matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba" },
+      headers: { matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+       },
       body: JSON.stringify(message),
     });
 
     setSendMessageText("");
   };
 
+  
   useEffect(() => {
     // Create the STOMP client with SockJS as the underlying transport.
     const client = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8083/ws"),
-      connectHeaders: { matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba" },
+      connectHeaders: { matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
+       },
       debug: (str) => console.debug("STOMP:", str),
       reconnectDelay: 5000,
     });
@@ -69,6 +97,7 @@ const InGameChatroom = () => {
             console.error("Error parsing message:", error);
           }
         }
+        
       );
 
       // Subscribe to acknowledgements (if needed).
@@ -82,14 +111,8 @@ const InGameChatroom = () => {
         }
       });
 
-      // Optionally, fetch the chat history from the backend.
-      fetch("/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba")
-        .then((response) => response.json())
-        .then((history) => {
-          // Assuming history is an array of ChatMessage objects.
-          setMessages(history);
-        })
-        .catch((e) => console.error("Failed to load chat history:", e));
+      fetchChatHistory();
+
     };
 
     client.onWebSocketError = (error) => {
