@@ -72,8 +72,8 @@ const Profile = () => {
           <h6 className="text-[20px] font-medium text-[#D2D3E0]">Country</h6>
         </div>
 
-        <div className="pt-23 ml-10 w-fit">
-          <div className="space-y-6.5 flex flex-col">
+        <div className="ml-10 w-fit pt-23">
+          <div className="flex flex-col space-y-6.5">
             <div className="flex space-x-6">
               <input
                 type="text"
@@ -111,7 +111,7 @@ const Profile = () => {
             <div className="relative w-72" ref={dropdownRef}>
               <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="placeholder-text-secondary w-70 flex cursor-pointer items-center justify-between rounded-lg border border-[#393A4B] bg-[#151621] p-2 pl-3 text-left text-[15px] caret-white focus:border-[#393A4B] focus:shadow-[0_0_0_2px_black] focus:outline-none focus:placeholder:opacity-0"
+                className="placeholder-text-secondary flex w-70 cursor-pointer items-center justify-between rounded-lg border border-[#393A4B] bg-[#151621] p-2 pl-3 text-left text-[15px] caret-white focus:border-[#393A4B] focus:shadow-[0_0_0_2px_black] focus:outline-none focus:placeholder:opacity-0"
               >
                 <span className="text-secondary">{selectedCountry}</span>
                 {
@@ -150,7 +150,7 @@ const Profile = () => {
       <div className="mx-auto w-fit pt-20">
         <Progress />
       </div>
-      <div className="fixed bottom-0 right-40 z-50">
+      <div className="fixed right-40 bottom-0 z-50">
         <Chatroom />
       </div>
     </div>
