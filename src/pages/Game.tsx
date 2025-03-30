@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import Navbar from '../components/Navbar';
 import { useState, useEffect } from 'react';
 import Workspace from '../components/Workspace/Workspace';
+import Input from '../components/Input';
 
 const Game: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -79,8 +80,7 @@ const Game: React.FC = () => {
             setChatroomId(response.chatroom);
             localStorage.setItem('chatroomId', response.chatroom);
             gameStateRef.current = 'active';
-
-            // TODO: show the user something that the game is found
+            forceRender((prev) => prev + 1);
           }
         } else if (gameStateRef.current === 'active') {
           // handle active game response
@@ -121,6 +121,7 @@ const Game: React.FC = () => {
             setChatroomId(response.chatroom);
             localStorage.setItem('chatroomId', response.chatroom);
             gameStateRef.current = 'active';
+            forceRender((prev) => prev + 1);
           }
         } else if (gameStateRef.current === 'active') {
           // handle active game response
@@ -153,7 +154,7 @@ const Game: React.FC = () => {
       const timer = setTimeout(() => {
         setShowGameFound(false);
         setGameActive(true);
-      }, 5000); // 5 seconds
+      }, 3500); // 5 seconds
 
       return () => clearTimeout(timer); // Cleanup the timer on unmount or state change
     }
@@ -166,13 +167,15 @@ const Game: React.FC = () => {
       return;
     }
 
-    gameStateRef.current = 'waiting';
     const userId = localStorage.getItem('userId');
 
     if (!userId) {
       console.error('User ID not found in local storage');
       return;
     }
+
+    gameStateRef.current = 'waiting';
+    forceRender((prev) => prev + 1);
 
     const message = {
       state: gameModeRef.current === 'single' ? 'join comp' : 'make coop',
@@ -182,6 +185,33 @@ const Game: React.FC = () => {
 
     socket.send(JSON.stringify(message));
 
+    console.log('Sent:', message);
+    setMenu(gameModeRef.current);
+  };
+
+  const joinGame = () => {
+    // send a message to the server to join the game
+    if (!socket) {
+      console.error('WebSocket is not connected');
+      return;
+    }
+
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      console.error('User ID not found in local storage');
+      return;
+    }
+
+    gameStateRef.current = 'waiting';
+    forceRender((prev) => prev + 1);
+    const message = {
+      state: 'join coop',
+      userid: userId,
+      roomid: roomId,
+    };
+
+    socket.send(JSON.stringify(message));
     console.log('Sent:', message);
     setMenu(gameModeRef.current);
   };
@@ -196,6 +226,9 @@ const Game: React.FC = () => {
     const message = {
       state: 'ready up',
     };
+
+    gameStateRef.current = 'matchmaking';
+    forceRender((prev) => prev + 1);
     socket.send(JSON.stringify(message));
   };
 
@@ -269,6 +302,18 @@ const Game: React.FC = () => {
         >
           Start Queue
         </Button>
+
+        <h1 className="text-xl font-bold">Or, join a lobby</h1>
+        <Input
+          className="w-40"
+          type="text"
+          placeholder="Enter Room ID"
+          value={roomId || ''}
+          onChange={(e) => setRoomId(e.target.value)}
+        />
+        <Button className="w-40" variant="secondary" onClick={() => joinGame()}>
+          Join Game
+        </Button>
       </>
     );
   };
@@ -341,9 +386,8 @@ const Game: React.FC = () => {
       <div className="bg-bg-active flex h-fit w-100 flex-col items-center gap-4 rounded-lg px-5 py-10">
         <h1 className="mb-5 text-xl font-bold">Game Over</h1>
         <h1 className="text-xl font-bold">
-          <br />
-          Results:
-          <br />
+          Your Results:
+          {/* TODO DISPLAY THE GAME RESULTS HERE */}
         </h1>
         <Button
           className="w-40"
@@ -388,6 +432,8 @@ const Game: React.FC = () => {
             <Workspace
               problemId={problemId}
               gameId={gameId}
+              chatroomId={chatroomId!}
+              gameStateRef={gameStateRef}
               forceRender={forceRender}
             />
           )

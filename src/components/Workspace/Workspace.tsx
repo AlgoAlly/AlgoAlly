@@ -9,13 +9,19 @@ import {
   ProblemDifficulty,
 } from '../../types';
 import axios from 'axios';
+import InGameChatroom from '../InGameChatroom';
 
 type WorkspaceProps = {
   problemId: string;
   gameId: string;
+  chatroomId: string;
 };
 
-const Workspace: React.FC<WorkspaceProps> = ({ problemId, gameId }) => {
+const Workspace: React.FC<WorkspaceProps> = ({
+  problemId,
+  gameId,
+  chatroomId,
+}) => {
   // fetch the problem
   const [problem, setProblem] = useState<Problem | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,6 +118,9 @@ const Workspace: React.FC<WorkspaceProps> = ({ problemId, gameId }) => {
               setSuccess={() => {}}
               gameId={gameId}
             />
+          </div>
+          <div className="fixed right-70 bottom-0 z-50">
+            <InGameChatroom chatroomId={chatroomId} />
           </div>
         </Split>
       )}
