@@ -1,10 +1,8 @@
 import React, { useRef } from 'react';
 import Button from '../components/Button';
 import Navbar from '../components/Navbar';
-import Split from 'react-split';
 import { useState, useEffect } from 'react';
-import ProblemView from '../components/Workspace/ProblemView';
-import Editor from '../components/Workspace/Editor/Editor';
+import Workspace from '../components/Workspace/Workspace';
 
 const Game: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -25,9 +23,9 @@ const Game: React.FC = () => {
   // waiting menu state vars
   const [menu, setMenu] = React.useState<'single' | 'squads' | null>(null);
 
-  const gameStateRef = useRef<'waiting' | 'matchmaking' | 'active' | null>(
-    null
-  );
+  const gameStateRef = useRef<
+    'waiting' | 'matchmaking' | 'active' | 'over' | null
+  >(null);
   const [, forceRender] = useState(0);
 
   // co-op matchmaking state vars
@@ -79,6 +77,7 @@ const Game: React.FC = () => {
             setGameId(response.gameid);
             setProblemId(response.problemid);
             setChatroomId(response.chatroom);
+            localStorage.setItem('chatroomId', response.chatroom);
             gameStateRef.current = 'active';
 
             // TODO: show the user something that the game is found
@@ -86,7 +85,14 @@ const Game: React.FC = () => {
         } else if (gameStateRef.current === 'active') {
           // handle active game response
           if (response.state === 'game finished') {
-            // TODO
+            // display the game over display
+            gameStateRef.current = 'over';
+            forceRender((prev) => prev + 1);
+            setGameActive(false);
+            setGameId(null);
+            setProblemId(null);
+            setChatroomId(null);
+            setRoomId(null);
           }
         }
       } else if (gameModeRef.current === 'squads') {
@@ -113,12 +119,19 @@ const Game: React.FC = () => {
             setGameId(response.gameid);
             setProblemId(response.problemid);
             setChatroomId(response.chatroom);
+            localStorage.setItem('chatroomId', response.chatroom);
             gameStateRef.current = 'active';
           }
         } else if (gameStateRef.current === 'active') {
           // handle active game response
           if (response.state === 'game finished') {
-            // TODO
+            gameStateRef.current = 'over';
+            forceRender((prev) => prev + 1);
+            setGameActive(false);
+            setGameId(null);
+            setProblemId(null);
+            setChatroomId(null);
+            setRoomId(null);
           }
         }
       }
@@ -184,17 +197,6 @@ const Game: React.FC = () => {
       state: 'ready up',
     };
     socket.send(JSON.stringify(message));
-  };
-
-  const problem = {
-    // TODO delete this and fetch it from the API instead
-    id: 1,
-    title: 'Example Problem',
-    description: 'This is an example problem description.',
-    testcases: [
-      { id: 1, input: 'example input 1', output: 'example output 1' },
-      { id: 2, input: 'example input 2', output: 'example output 2' },
-    ],
   };
 
   const SelectionMenu = () => {
@@ -334,57 +336,69 @@ const Game: React.FC = () => {
     );
   };
 
+  const GameOverDisplay = () => {
+    return (
+      <div className="bg-bg-active flex h-fit w-100 flex-col items-center gap-4 rounded-lg px-5 py-10">
+        <h1 className="mb-5 text-xl font-bold">Game Over</h1>
+        <h1 className="text-xl font-bold">
+          <br />
+          Results:
+          <br />
+        </h1>
+        <Button
+          className="w-40"
+          variant="secondary"
+          onClick={() => window.location.reload()}
+        >
+          Play Again
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div
       className={`flex h-screen w-full flex-col ${gameActive ? '' : 'items-center'} overflow-x-hidden`}
     >
       <Navbar />
 
-      {!gameActive ? (
-        <div className="bg-bg-secondary items-centerrounded-lg relative mt-30 flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-lg px-10 py-20">
-          {menu === null ? (
-            <SelectionMenu />
-          ) : menu === 'single' ? (
-            <MatchmakingMenu />
-          ) : // if the menu is squads
+      <div
+        className={`flex h-full w-full flex-col ${
+          gameActive ? '' : 'items-center'
+        } ${gameStateRef.current === 'over' ? 'blur-md' : ''}`} // Apply blur when gameStateRef.current === 'over'
+      >
+        {!gameActive ? (
+          <div className="bg-bg-secondary items-centerrounded-lg relative mt-30 flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-lg px-10 py-20">
+            {menu === null ? (
+              <SelectionMenu />
+            ) : menu === 'single' ? (
+              <MatchmakingMenu />
+            ) : // if the menu is squads
 
-          gameStateRef.current === 'matchmaking' ? (
-            <MatchmakingMenu />
-          ) : (
-            <SquadMenu />
-          )}
+            gameStateRef.current === 'matchmaking' ? (
+              <MatchmakingMenu />
+            ) : (
+              <SquadMenu />
+            )}
+          </div>
+        ) : (
+          // the game is in active state
+          problemId &&
+          gameId && (
+            <Workspace
+              problemId={problemId}
+              gameId={gameId}
+              forceRender={forceRender}
+            />
+          )
+        )}
+        {/* <Workspace problemId="b1b548b5-48b4-4be5-b3b4-551c7250100f" gameId="" /> */}
+      </div>
+      {/* Game Over Display */}
+      {gameStateRef.current === 'over' && (
+        <div className="bg-opacity-20 absolute inset-0 flex items-center justify-center">
+          <GameOverDisplay />
         </div>
-      ) : (
-        <>
-          <Split
-            className="flex flex-row"
-            direction="horizontal"
-            sizes={[30, 70]}
-            gutterAlign="center"
-            gutterStyle={(dimension, gutterSize, number) => {
-              // set the gutter to be the same color as the background
-              return {
-                backgroundColor: 'var(--color-border-primary)',
-                width: '6px',
-                cursor: 'col-resize',
-                // set the hover style
-                ':hover': { cursor: 'col-resize' },
-              };
-            }}
-          >
-            <div>
-              <ProblemView problem={problem} _solved={false} />
-            </div>
-            <div>
-              <Editor
-                problem={problem}
-                //   TODO
-                setSolved={() => {}}
-                setSuccess={() => {}}
-              />
-            </div>
-          </Split>
-        </>
       )}
     </div>
   );

@@ -1,58 +1,31 @@
 import React from 'react';
 import { Problem } from '../../types';
 
-import CircleSkeleton from '../Skeletons/CircleSkeleton';
 import RectangleSkeleton from '../Skeletons/RectangleSkeleton';
-import { useEffect, useState } from 'react';
-import {
-  AiFillLike,
-  AiFillDislike,
-  AiOutlineLoading3Quarters,
-} from 'react-icons/ai';
 import { BsCheck2Circle } from 'react-icons/bs';
+import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
+import remarkBreaks from 'remark-breaks';
+import 'katex/dist/katex.min.css'; // `rehype-katex` does not import the CSS for yous
 
 interface ProblemViewProps {
   // Define your props here
   problem: Problem;
   _solved: boolean;
+  loading: boolean;
 }
 
-const problem = {
-  id: 1,
-  title: 'Example Problem',
-  description: 'This is an example problem description.',
-  difficulty: 'easy',
-  testcases: [
-    { id: 1, input: 'example input 1', output: 'example output 1' },
-    { id: 2, input: 'example input 2', output: 'example output 2' },
-  ],
-};
-
-const useGetCurrentProblem = (problemId: number) => {
-  return {
-    currentProblem: problem,
-    loading: false,
-    problemDifficultyClass: '',
-    setCurrentProblem: () => {},
+const ProblemView: React.FC<ProblemViewProps> = ({
+  problem,
+  _solved,
+  loading,
+}) => {
+  const difficultyStyles = {
+    easy: 'text-green-400',
+    medium: 'text-yellow-400',
+    hard: 'text-red-400',
   };
-};
-
-const useGetUsersDataOnProblem = (problemId: number) => {
-  return {
-    liked: false,
-    disliked: false,
-    solved: false,
-    setData: () => {},
-    starred: false,
-  };
-};
-
-const ProblemView: React.FC<ProblemViewProps> = ({ problem, _solved }) => {
-  const { currentProblem, loading, problemDifficultyClass, setCurrentProblem } =
-    useGetCurrentProblem(problem.id);
-  const { liked, disliked, solved, setData, starred } =
-    useGetUsersDataOnProblem(problem.id);
-  const [updating, setUpdating] = useState(false);
 
   return (
     <div className="bg-dark-layer-1">
@@ -76,14 +49,14 @@ const ProblemView: React.FC<ProblemViewProps> = ({ problem, _solved }) => {
                 {problem?.title}
               </div>
             </div>
-            {!loading && currentProblem && (
+            {!loading && problem && (
               <div className="mt-3 flex items-center">
                 <div
-                  className={`${problemDifficultyClass} bg-opacity-[.15] inline-block rounded-[21px] px-2.5 py-1 text-xs font-medium capitalize`}
+                  className={`${difficultyStyles[problem.difficulty]} bg-opacity-[.15] inline-block rounded-[21px] px-2.5 py-1 text-xs font-medium capitalize`}
                 >
-                  {currentProblem.difficulty}
+                  {problem.difficulty}
                 </div>
-                {(solved || _solved) && (
+                {_solved && (
                   <div className="text-green-s text-dark-green-s ml-4 rounded p-[3px] text-lg transition-colors duration-200">
                     <BsCheck2Circle />
                   </div>
@@ -101,7 +74,27 @@ const ProblemView: React.FC<ProblemViewProps> = ({ problem, _solved }) => {
             <div className="mt-3 text-sm text-white">
               <div dangerouslySetInnerHTML={{ __html: problem.description }} />
             </div>
-
+            {/* The problem data (in markdown) */}
+            <div className="mt-4 text-sm text-white">
+              <ReactMarkdown
+                rehypePlugins={[rehypeKatex]}
+                remarkPlugins={[remarkMath, remarkBreaks]}
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    return (
+                      <pre
+                        className={className}
+                        {...(props as React.HTMLAttributes<HTMLPreElement>)}
+                      >
+                        <code>{String(children).replace(/\\n/g, '\n\n')}</code>
+                      </pre>
+                    );
+                  },
+                }}
+              >
+                {problem.markdown}
+              </ReactMarkdown>
+            </div>
             {/* Examples */}
             <div className="mt-4">
               {problem.testcases.map((testcase, index) => (
@@ -109,21 +102,13 @@ const ProblemView: React.FC<ProblemViewProps> = ({ problem, _solved }) => {
                   <p className="font-medium text-white">
                     Example {index + 1}:{' '}
                   </p>
-                  {testcase.img && (
-                    <img src={testcase.img} alt="" className="mt-3" />
-                  )}
                   <div className="example-card">
                     <pre>
                       <strong className="text-white">Input: </strong>{' '}
                       {testcase.input}
                       <br />
                       <strong>Output:</strong>
-                      {testcase.output} <br />
-                      {testcase.explanation && (
-                        <>
-                          <strong>Explanation:</strong> {testcase.explanation}
-                        </>
-                      )}
+                      {testcase.expectedOutput} <br />
                     </pre>
                   </div>
                 </div>
