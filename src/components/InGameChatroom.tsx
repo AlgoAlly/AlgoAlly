@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import { ChevronUpIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ChevronUpIcon } from "@heroicons/react/24/solid";
 
 interface ChatMessage {
   sender: string;

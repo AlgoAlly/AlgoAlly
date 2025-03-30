@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Button from '../components/Button';
-import InGameChatroom from '../components/InGameChatroom';
 
 const Profile = () => {
   const [firstName, setFirstName] = useState('');
