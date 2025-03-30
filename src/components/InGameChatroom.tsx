@@ -30,24 +30,24 @@ const InGameChatroom = ({ chatroomId }: InGameChatroomProps) => {
     }
   };
 
-  async function fetchChatHistory() {
-    try {
-      const response = await fetch(`http://localhost:8083/chat/history/${chatroomId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+  // async function fetchChatHistory() {
+  //   try {
+  //     const response = await fetch(`http://localhost:8083/chat/history/${chatroomId}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+  //       },
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch chat history");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch chat history");
+  //     }
 
-      const history: ChatMessage[] = await response.json();
-      setMessages(history);
-    } catch (e) {
-      console.error("Failed to load chat history:", e);
-    }
-  }
+  //     const history: ChatMessage[] = await response.json();
+  //     setMessages(history);
+  //   } catch (e) {
+  //     console.error("Failed to load chat history:", e);
+  //   }
+  // }
 
   const sendMessage = () => {
     if (!clientRef.current) return;
@@ -102,7 +102,7 @@ const InGameChatroom = ({ chatroomId }: InGameChatroomProps) => {
         }
       });
 
-      fetchChatHistory();
+      // fetchChatHistory();
     };
 
     client.onWebSocketError = (error) => {
@@ -143,9 +143,6 @@ const InGameChatroom = ({ chatroomId }: InGameChatroomProps) => {
         <div className="h-100 border border-zinc-400 bg-[#1f2136] rounded-sm shadow-lg p-4 flex flex-col items-center">
           <div className="flex justify-between border-b-2 pb-2 mb-4 text-white text-[20px] font-bold w-full">
             <h1>Chatroom</h1>
-            <button onClick={() => setIsOpen(false)}>
-              <XMarkIcon className="w-8 h-8 cursor-pointer" />
-            </button>
           </div>
           <div id="chatMessages" className="flex flex-col h-96 overflow-y-auto w-full">
             {messages.map((msg, index) => (

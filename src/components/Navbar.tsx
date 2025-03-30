@@ -11,6 +11,7 @@ const Navbar: React.FC = () => {
     { name: 'Problems', path: '/problems' },
     { name: 'Friends', path: '/friends' },
     { name: 'About', path: '/about' },
+    { name: 'Profile', path: '/profile' },
   ];
 
   const logout = () => {

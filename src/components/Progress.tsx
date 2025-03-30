@@ -24,7 +24,7 @@ const Progress = () => {
         ></ProgressBar>
         {hoveredEasy && (
           <div className="mt-1 rounded-lg bg-gray-800 p-2 text-white">
-            30/100 problems solved
+            80/100 problems solved
           </div>
         )}
       </div>
@@ -43,7 +43,7 @@ const Progress = () => {
         ></ProgressBar>
         {hoveredMedium && (
           <div className="mt-1 rounded-lg bg-gray-800 p-2 text-white">
-            30/100 problems solved
+            80/100 problems solved
           </div>
         )}
       </div>
@@ -62,7 +62,7 @@ const Progress = () => {
         ></ProgressBar>
         {hoveredHard && (
           <div className="mt-1 rounded-lg bg-gray-800 p-2 text-white">
-            30/100 problems solved
+            80/100 problems solved
           </div>
         )}
       </div>

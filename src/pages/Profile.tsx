@@ -147,7 +147,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="mx-auto w-fit pt-20">
+      <div className="mx-auto w-fit pt-10">
         <Progress />
       </div>
       {/* <div className="fixed right-40 bottom-0 z-50">
