@@ -9,12 +9,16 @@ interface ChatMessage {
   timestamp: string; // ISO date string
 }
 
-const InGameChatroom = () => {
+interface InGameChatroomProps {
+  chatroomId: string;
+}
+
+const InGameChatroom = ({ chatroomId }: InGameChatroomProps) => {
   const [sendMessageText, setSendMessageText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const clientRef = useRef<Client | null>(null);
-  const lastMessageRef = useRef<HTMLDivElement | null>(null); // Reference for last message
+  const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
   const toggleBox = () => {
     setIsOpen(!isOpen);
@@ -28,12 +32,11 @@ const InGameChatroom = () => {
 
   async function fetchChatHistory() {
     try {
-      const response = await fetch("http://localhost:8083/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba", {
+      const response = await fetch(`http://localhost:8083/chat/history/${chatroomId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-
 
       if (!response.ok) {
         throw new Error("Failed to fetch chat history");
@@ -42,11 +45,9 @@ const InGameChatroom = () => {
       const history: ChatMessage[] = await response.json();
       setMessages(history);
     } catch (e) {
-        
       console.error("Failed to load chat history:", e);
     }
   }
-  
 
   const sendMessage = () => {
     if (!clientRef.current) return;
@@ -60,7 +61,7 @@ const InGameChatroom = () => {
     clientRef.current.publish({
       destination: "/app/chat.sendMessage",
       headers: {
-        matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        matchId: chatroomId,
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(message),
@@ -73,7 +74,7 @@ const InGameChatroom = () => {
     const client = new Client({
       webSocketFactory: () => new SockJS("http://localhost:8083/ws"),
       connectHeaders: {
-        matchId: "3419c27a-a25b-4437-ad7b-7f73eb48e8ba",
+        matchId: chatroomId,
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       debug: (str) => console.debug("STOMP:", str),
@@ -83,7 +84,7 @@ const InGameChatroom = () => {
     client.onConnect = () => {
       console.log("WebSocket Connected");
 
-      client.subscribe("/topic/chatroom.3419c27a-a25b-4437-ad7b-7f73eb48e8ba", (message) => {
+      client.subscribe(`/topic/chatroom.${chatroomId}`, (message) => {
         try {
           const msg: ChatMessage = JSON.parse(message.body);
           setMessages((prev) => [...prev, msg]);
@@ -120,9 +121,8 @@ const InGameChatroom = () => {
         clientRef.current.deactivate();
       }
     };
-  }, []);
+  }, [chatroomId]); // Reconnect when chatroomId changes
 
-  // Auto-scroll whenever messages change
   useEffect(() => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
@@ -133,7 +133,7 @@ const InGameChatroom = () => {
     <div>
       <button
         onClick={toggleBox}
-        className="w-100 p-2 border border-[#393A4B] text-left pl-3 rounded-sm bg-[#151621] text-white focus:outline-none flex justify-between items-center cursor-pointer"
+        className="w-100 p-2 border border-border-primary text-left pl-3 rounded-sm bg-bg-active text-white focus:outline-none flex justify-between items-center cursor-pointer"
       >
         {isOpen ? "Close Chatroom" : "Open Chatroom"}
         <ChevronUpIcon className={`w-5 h-5 text-white ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`} />
@@ -151,7 +151,7 @@ const InGameChatroom = () => {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                ref={index === messages.length - 1 ? lastMessageRef : null} // Attach ref to last message
+                ref={index === messages.length - 1 ? lastMessageRef : null}
                 className={`mb-4 ${msg.sender === localStorage.getItem("username") ? "text-right" : "text-left"}`}
               >
                 <div className={`inline-block p-3 rounded-lg shadow-sm ${msg.sender === localStorage.getItem("username") ? "bg-blue-600 text-white" : "bg-gray-700 text-white"}`}>

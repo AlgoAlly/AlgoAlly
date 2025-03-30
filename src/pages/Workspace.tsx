@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Editor from '../components/Workspace/Editor/Editor';
 import ProblemView from '../components/Workspace/ProblemView';
 import EditorFooter from '../components/Workspace/Editor/EditorFooter';
 import Navbar from '../components/Navbar';
 import Split from 'react-split';
+import InGameChatroom from '../components/InGameChatroom';
 
 const Workspace: React.FC = () => {
   const problem = {
@@ -45,6 +46,13 @@ const Workspace: React.FC = () => {
             setSolved={() => {}}
             setSuccess={() => {}}
           />
+        </div>
+        <div>
+        <div className="fixed right-70 bottom-0 z-50">
+          <InGameChatroom 
+            chatroomId={localStorage.getItem("chatroomid") ?? ""} 
+          />
+      </div>
         </div>
       </Split>
     </div>

@@ -150,9 +150,9 @@ const Profile = () => {
       <div className="mx-auto w-fit pt-20">
         <Progress />
       </div>
-      <div className="fixed right-40 bottom-0 z-50">
+      {/* <div className="fixed right-40 bottom-0 z-50">
         <InGameChatroom />
-      </div>
+      </div> */}
     </div>
   );
 };
