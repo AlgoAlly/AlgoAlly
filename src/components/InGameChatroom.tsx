@@ -28,11 +28,12 @@ const InGameChatroom = () => {
 
   async function fetchChatHistory() {
     try {
-      const response = await fetch("/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba", {
+      const response = await fetch("http://localhost:8083/chat/history/3419c27a-a25b-4437-ad7b-7f73eb48e8ba", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
+
 
       if (!response.ok) {
         throw new Error("Failed to fetch chat history");
@@ -41,9 +42,11 @@ const InGameChatroom = () => {
       const history: ChatMessage[] = await response.json();
       setMessages(history);
     } catch (e) {
+        
       console.error("Failed to load chat history:", e);
     }
   }
+  
 
   const sendMessage = () => {
     if (!clientRef.current) return;
