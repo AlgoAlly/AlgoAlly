@@ -134,7 +134,7 @@ const Profile = () => {
   </div>
 </div>
 <div className="w-fit mx-auto pt-20">
-      <Progress />
+      <Progress username={"your"}/>
       </div>
       <div className="fixed bottom-0 right-40 z-50">
         <Chatroom />
