@@ -9,7 +9,7 @@ const Progress = ( { username }) => {
 
     return (
         <div className="border border-zinc-400 p-4 rounded-xl bg-[#1f2136]">
-            <h1 className="text-center text-white text-[30px]"> {username} Progress </h1>
+            <h1 className="text-center text-white text-[30px]"> {username}'s Progress </h1>
             <div className="mb-4 w-96" 
                 onMouseEnter={() => setHoveredEasy(true)}
                 onMouseLeave={() => setHoveredEasy(false)}

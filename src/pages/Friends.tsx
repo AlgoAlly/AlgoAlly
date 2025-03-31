@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Navbar from "../components/Navbar";
 import Progress from "../components/Progress";
+import Button from "../components/Button";
 
 const Friends = () => {
   const problems = [
@@ -14,6 +15,10 @@ const Friends = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [popUp, setPopUp] = useState(false);
+  const [friendList, setFriendList] = useState(true);
+  const [requestList, setRequestList] = useState(false);
+  const [searchList, setSearchList] = useState(false);
+  const [profileName, setProfileName] = useState("");
   const itemsPerPage = 5;
 
   const totalPages = Math.ceil(problems.length / itemsPerPage);
@@ -24,8 +29,30 @@ const Friends = () => {
     }
   };
 
-  const openPopUp = () => {
+  const openFriendsPage = () => {
+    setFriendList(true);
+    setRequestList(false);
+    setSearchList(false);
+    setPopUp(false);
+  }
+
+  const openRequestsPage = () => {
+    setFriendList(false);
+    setRequestList(true);
+    setSearchList(false);   
+    setPopUp(false);
+  }
+
+  const openSearchPage = () => {
+    setFriendList(false);
+    setRequestList(false);
+    setSearchList(true);   
+    setPopUp(false);
+  }
+
+  const openPopUp = ( username: string ) => {
     setPopUp(!popUp);
+    setProfileName(username);
   }
 
   const handlePrevPage = () => {
@@ -48,36 +75,37 @@ const Friends = () => {
         <h1 className="text-4xl font-bold mb-8 mt-8">Friends Page</h1>
         <div className="w-full max-w-4xl space-y-2">
           <div className="grid grid-cols-3 gap-6 px-6 py-4 bg-bg-active rounded-t-lg shadow-md font-bold mb-2 text-text-primary w-full">
-            <button className="relative text-center font-bold hover:font-bold">
+            <button className="relative text-center cursor-pointer"
+            onClick={() => openFriendsPage()}>
               Friends
             </button>
-            <button className="relative text-center cursor-pointer">
+            <button className="relative text-center cursor-pointer"
+            onClick={() => openRequestsPage()}>
               Friend Requests
             </button>
-            <button className="relative text-center cursor-pointer">
+            <button className="relative text-center cursor-pointer"
+            onClick={() => openSearchPage()}>
               Search For A Friend
             </button>
           </div>
+          {friendList && (
+          <div>  
+          <h2 className="text-3xl text-ce font-bold mb-6 mt-6">Your Friends List:</h2>
+          <div className="grid grid-cols-2 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active">
+            <span className="text-center pr-20">{"Name"}</span>
 
-          <h2 className="text-3xl font-bold mb-6 mt-6">Your Friends List:</h2>
-          <div className="grid grid-cols-4 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active">
-            <span className="text-left">{"Profile Picture"}</span>
-            <span className="text-left">{"Name"}</span>
-            <span className="text-center pl-20">{"Status"}</span>
-            <span className="text-center">{"Rank Points"}</span>
           </div>
 
           {getCurrentPageItems().map((problem) => (
             <button
               key={problem.id}
-              className="grid grid-cols-4 px-6 py-6 w-224 bg-bg-secondary border-b border-border-primary hover:bg-bg-active cursor-pointer"
-            onClick={() => openPopUp()}
+              className="grid grid-cols-2 px-6 py-6 w-224 bg-bg-secondary border-b border-border-primary hover:bg-bg-active cursor-pointer"
+            onClick={() => openPopUp( problem.name )}
             >
               
-              <span className="text-left pl-12">{problem.id}</span>
-              <span className="text-left">{problem.name}</span>
-              <span className="text-center pl-20">{problem.difficulty}</span>
-              <span className="text-center">{problem.solveRate}</span>
+
+              <span className="text-center pr-20">{problem.name}</span>
+              <h1> Click to see {problem.name}'s stats!</h1>
             </button>
           ))}
 {popUp && (
@@ -92,15 +120,89 @@ const Friends = () => {
       className="w-fit p-6 bg-[#1f2136] rounded-lg shadow-lg"
       onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
     >
-      <Progress username="persons" />
+      <Progress username={profileName} />
       <button 
-        className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md"
+        className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md cursor-pointer"
         onClick={() => setPopUp(false)}
       >
         Close
       </button>
     </div>
   </div>
+)}
+</div> 
+          )} 
+  {requestList && (
+          <div>  
+          <h2 className="text-3xl text-ce font-bold mb-6 mt-6">Incoming Friend Requests:</h2>
+          <div className="grid grid-cols-2 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active">
+            <span className="text-center pr-20">{"Name"}</span>
+            <span className="text-center">{"Accept/Decline"}</span>
+          </div>
+
+          {getCurrentPageItems().map((problem) => (
+            <div
+              key={problem.id}
+              className="grid grid-cols-2 px-6 py-4 w-224 bg-bg-secondary border-b border-border-primary"
+            >
+              
+
+              <span className="text-center pr-20 self-center">{problem.name}</span>
+              <div className="text-center">
+              <Button
+            className="h-10 w-18 mr-6"
+            variant="secondary"
+          >
+            Accept
+          </Button>
+            <button className="bg-bg-active
+                     active:ring-border-secondary
+                     border-border-primary
+                     active:bg-button-primary-active
+                     hover:bg-button-primary-hover h-10 inline-flex items-center
+                      justify-center px-4 leading-5 transition-all duration-150 rounded-md
+                       active:duration-50 active:ring-1 border-1">
+                      Reject
+                     </button>
+              </div>
+            </div>
+          ))}
+            </div>
+          
+  )}
+
+{searchList && (
+          <div> 
+          <h2 className="text-3xl text-ce font-bold mb-4 mt-6">Search For A User:</h2>
+          <input
+        type="text"
+        placeholder="Search By Username"
+        className="w-full p-2 border border-[#393A4B] rounded-lg placeholder-text-secondary mb-4 placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"  
+            />
+          <div className="grid grid-cols-2 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active">
+            <span className="text-center pr-20">{"Name"}</span>
+            <span className="text-center">{"Send Friend Request"}</span>
+          </div>
+
+          {getCurrentPageItems().map((problem) => (
+            <div
+              key={problem.id}
+              className="grid grid-cols-2 px-6 py-4 w-224 bg-bg-secondary border-b border-border-primary"
+            >
+              
+
+              <span className="text-center pr-20 self-center">{problem.name}</span>
+              <div className="text-center">
+              <Button
+            className="h-10 w-18"
+            variant="secondary"
+          >
+            Send
+          </Button>
+              </div>
+            </div>
+          ))}
+            </div>
 )}
 
 
