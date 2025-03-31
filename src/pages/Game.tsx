@@ -412,7 +412,7 @@ const Game: React.FC = () => {
         } ${gameStateRef.current === 'over' ? 'blur-md' : ''}`} // Apply blur when gameStateRef.current === 'over'
       >
         {!gameActive ? (
-          <div className="bg-bg-secondary items-centerrounded-lg relative mt-30 flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-lg px-10 py-20">
+          <div className="bg-bg-secondary relative mt-30 flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-lg px-10 py-20">
             {menu === null ? (
               <SelectionMenu />
             ) : menu === 'single' ? (
@@ -433,8 +433,6 @@ const Game: React.FC = () => {
               problemId={problemId}
               gameId={gameId}
               chatroomId={chatroomId!}
-              gameStateRef={gameStateRef}
-              forceRender={forceRender}
             />
           )
         )}
