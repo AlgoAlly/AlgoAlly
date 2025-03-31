@@ -6,15 +6,34 @@ import { python } from '@codemirror/lang-python';
 import { atomone } from '@uiw/codemirror-theme-atomone';
 import { Problem } from '../../../types';
 import EditorFooter from './EditorFooter';
+import axios from 'axios';
 
 type EditorProps = {
   problem: Problem;
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setSolved: React.Dispatch<React.SetStateAction<boolean>>;
+  gameId: string;
 };
 
-const Editor: React.FC<EditorProps> = ({ problem, setSuccess, setSolved }) => {
+const pythonStarterCode = `# Write your code here
+# parse inputs from stdin:
+import sys
+input = []
+for line in sys.stdin:
+    line = line.strip()
+    input.append(line)
+  
+# set up your variables ie.
+# nums = input[0]`;
+
+const Editor: React.FC<EditorProps> = ({
+  problem,
+  setSuccess,
+  setSolved,
+  gameId,
+}) => {
   const [activeTestCase, setActiveTestCase] = React.useState(0);
+  const [code, setCode] = React.useState(pythonStarterCode);
 
   // edit the atomone theme to match ours
   // @ts-expect-error this is a hack to set our custom theme
@@ -23,6 +42,85 @@ const Editor: React.FC<EditorProps> = ({ problem, setSuccess, setSolved }) => {
   // @ts-expect-error this is a hack to set our custom theme
   atomone[0][1].value.rules[1] =
     '.ͼ16 {background-color: var(--color-bg-primary); color: var(--color-text-primary);}';
+
+  const submitProblem = async () => {
+    // submit the code to the API
+    const host = import.meta.env.VITE_JUDGE0_API_HOST || 'http://localhost';
+    const port = import.meta.env.VITE_JUDGE0_API_PORT || '8081';
+
+    if (!localStorage.getItem('userId')) {
+      // TODO handle this error (toast)
+      console.error('Game ID or User ID not found in local storage');
+      return;
+    }
+
+    const data = {
+      sourceCode: code,
+      language: 'Python',
+      ID: problem.id,
+      gameid: gameId,
+      userid: parseInt(localStorage.getItem('userId')!),
+    };
+
+    const response = await axios.post<{ token: string }>(
+      `${host}:${port}/submit`,
+      JSON.stringify(data),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        validateStatus: () => {
+          return true;
+        },
+      }
+    );
+
+    // check if the response is successful
+    if (response.status !== 200 || !response.data.token) {
+      // TODO handle this error (toast)
+      console.error('Error submitting code: ' + response.data);
+      return;
+    }
+
+    // get the token from the response
+    const token = response.data.token;
+
+    while (true) {
+      const statusResponse = await axios.get<{
+        status: number;
+        errors?: string[];
+      }>(`${host}:${port}/status/${token}`, {
+        validateStatus: () => {
+          return true;
+        },
+      });
+
+      if (statusResponse.status !== 200) {
+        // TODO handle this error (toast)
+        console.error('Error getting status: ' + statusResponse.data);
+        return;
+      }
+
+      // check the status of the submission
+      if (statusResponse.data.status === 0) {
+        // wait for 1 second
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        continue;
+      } else if (statusResponse.data.status === 2) {
+        // if the status is 2 then the submission is correct
+        setSuccess(true);
+        setSolved(true);
+        console.log('Submission successful');
+
+        return;
+      } else if (statusResponse.data.status === 1) {
+        // the submission failed
+        const errors = statusResponse.data.errors;
+        console.log('Submission failed: ' + errors);
+        // this should display this somewhere
+      }
+    }
+  };
 
   return (
     <div className="relative flex flex-col overflow-x-hidden">
@@ -49,9 +147,10 @@ const Editor: React.FC<EditorProps> = ({ problem, setSuccess, setSolved }) => {
       >
         <div className="w-full overflow-auto">
           <ReactCodeMirror
-            value={`print("hello world")`}
+            value={code}
             theme={atomone}
             extensions={[python()]}
+            onChange={(value) => setCode(value)}
           />
         </div>
         <div className="w-full overflow-auto px-5">
@@ -90,13 +189,12 @@ const Editor: React.FC<EditorProps> = ({ problem, setSuccess, setSolved }) => {
             </div>
             <p className="mt-4 text-sm font-medium text-white">Output:</p>
             <div className="bg-dark-fill-3 mt-2 w-full cursor-text rounded-lg border border-transparent px-3 py-[10px] text-white">
-              {problem.testcases[activeTestCase].output}
+              {problem.testcases[activeTestCase].expectedOutput}
             </div>
           </div>
         </div>
       </Split>
-      {/* TODO */}
-      <EditorFooter handleSubmit={() => {}} />
+      <EditorFooter handleSubmit={() => submitProblem()} />
     </div>
   );
 };

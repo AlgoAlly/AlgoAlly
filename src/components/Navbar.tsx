@@ -8,6 +8,7 @@ const Navbar: React.FC = () => {
 
   const links = [
     { name: 'Home', path: '/' },
+    { name: 'Play', path: '/game' },
     { name: 'Problems', path: '/problems' },
     { name: 'Friends', path: '/friends' },
     { name: 'About', path: '/about' },
@@ -36,8 +37,9 @@ const Navbar: React.FC = () => {
       <nav className="flex w-full flex-row items-center justify-between">
         <div className="flex items-center space-x-6">
           <Logo className="h-10 w-10" fill="var(--color-text-primary)" />
-          {links.map(({ name, path }) => (
+          {links.map(({ name, path }, i) => (
             <NavLink
+              key={i}
               to={path}
               className="text-primary hover:text-primary-hover text-[18px] hover:font-bold"
             >

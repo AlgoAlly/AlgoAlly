@@ -22,12 +22,12 @@ const Home = () => {
 
             <div className="mt-9 px-8 sm:flex sm:items-center sm:justify-center sm:space-x-5 sm:px-0">
               <a
-                href="/problems"
+                href="/game"
                 title=""
                 className="font-pj bg-bg-active inline-flex w-full items-center justify-center rounded-xl border-2 border-transparent px-8 py-3 text-lg font-bold text-white transition-all duration-200 hover:bg-gray-600 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:outline-none sm:w-auto"
                 role="button"
               >
-                View Problems
+                Play Now
               </a>
 
               <a
