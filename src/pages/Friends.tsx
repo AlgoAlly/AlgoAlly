@@ -2,6 +2,7 @@ import { SetStateAction, useState } from "react";
 import Navbar from "../components/Navbar";
 import Progress from "../components/Progress";
 import Button from "../components/Button";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const Friends = () => {
   const problems = [
@@ -172,17 +173,18 @@ const Friends = () => {
   )}
 
 {searchList && (
-          <div> 
-          <h2 className="text-3xl text-ce font-bold mb-4 mt-6">Search For A User:</h2>
-          <input
-        type="text"
-        placeholder="Search By Username"
-        className="w-full p-2 border border-[#393A4B] rounded-lg placeholder-text-secondary mb-4 placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"  
-            />
-          <div className="grid grid-cols-2 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active">
-            <span className="text-center pr-20">{"Name"}</span>
-            <span className="text-center">{"Send Friend Request"}</span>
-          </div>
+  <div> 
+  <h2 className="text-3xl text-ce font-bold mb-4 mt-6">Search For A User:</h2>
+  <div className="relative w-full mb-4">
+    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <MagnifyingGlassIcon className="h-5 w-5" />
+    </div>
+    <input
+      type="text"
+      placeholder="Search By Username"
+      className="w-full p-2 pl-10 border border-[#393A4B] rounded-lg placeholder-text-secondary placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"  
+    />
+  </div>
 
           {getCurrentPageItems().map((problem) => (
             <div
