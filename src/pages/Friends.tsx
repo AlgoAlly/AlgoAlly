@@ -185,6 +185,10 @@ const Friends = () => {
       className="w-full p-2 pl-10 border border-[#393A4B] rounded-lg placeholder-text-secondary placeholder:text-[15px] focus:placeholder:opacity-0 focus:outline-none bg-[#151621] focus:border-[#393A4B] text-white caret-white focus:shadow-[0_0_0_2px_black]"  
     />
   </div>
+  <div className="grid grid-cols-2 px-6 py-2 border-b-4 bg-bg-secondary border-b border-border-primary hover:bg-bg-active">
+            <span className="text-center pr-20">{"Name"}</span>
+            <span className="text-center">{"Accept/Decline"}</span>
+          </div>
 
           {getCurrentPageItems().map((problem) => (
             <div
