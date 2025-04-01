@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import Workspace from './pages/Workspace';
 import Home from './pages/Home';
 import Game from './pages/Game';
+import WorkspaceWrapper from './pages/WorkspaceWrapper';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/workspace" element={<Workspace />} />
+                <Route path="/workspace/:id" element={<WorkspaceWrapper />} />
                 <Route path="/game" element={<Game />} />
                 <Route path="/" element={<Home />} />
             </Routes>
