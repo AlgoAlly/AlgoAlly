@@ -39,7 +39,7 @@ const Game: React.FC = () => {
 
   useEffect(() => {
     // Create a new WebSocket connection
-    const host = import.meta.env.VITE_MATCHMAKING_API_HOST || 'localhost';
+    const host = import.meta.env.VITE_MATCHMAKING_API_HOST || '100.86.210.52';
     const port = import.meta.env.VITE_MATCHMAKING_API_PORT || '8082';
     const ws = new WebSocket(`ws://${host}:${port}/matchmaking`);
     setSocket(ws);
@@ -309,7 +309,11 @@ const Game: React.FC = () => {
           type="text"
           placeholder="Enter Room ID"
           value={roomId || ''}
-          onChange={(e) => setRoomId(e.target.value)}
+          onChange={(e) => {
+            e.stopPropagation(); // Prevent event propagation to avoid deselection
+            setRoomId(e.target.value);
+          }}
+          onClick={(e) => e.stopPropagation()} // Prevent deselection when clicking the input
         />
         <Button className="w-40" variant="secondary" onClick={() => joinGame()}>
           Join Game

@@ -32,7 +32,7 @@ const InGameChatroom = ({ chatroomId }: InGameChatroomProps) => {
 
   // async function fetchChatHistory() {
   //   try {
-  //     const response = await fetch(`http://localhost:8083/chat/history/${chatroomId}`, {
+  //     const response = await fetch(`http://100.86.210.52:8083/chat/history/${chatroomId}`, {
   //       headers: {
   //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
   //       },
@@ -71,7 +71,7 @@ const InGameChatroom = ({ chatroomId }: InGameChatroomProps) => {
   };
 
   useEffect(() => {
-    const host = import.meta.env.VITE_CHAT_API_HOST || 'http://localhost';
+    const host = import.meta.env.VITE_CHAT_API_HOST || 'http://100.86.210.52';
     const port = import.meta.env.VITE_CHAT_API_PORT || '8083';
     const client = new Client({
       webSocketFactory: () => new SockJS(`${host}:${port}/ws`),

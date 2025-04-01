@@ -13,6 +13,7 @@ const outDir = resolve(__dirname, 'dist');
 export default defineConfig({
   root,
   plugins: [react(), tailwindcss(), svgr()],
+  base: './',
   server: {
     host: '0.0.0.0',
     port: 5173,

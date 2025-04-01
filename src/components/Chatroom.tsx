@@ -18,7 +18,7 @@
 
 //   useEffect(() => {
 //     try {
-//       const sockJS = new SockJS('http://localhost:8083/ws');
+//       const sockJS = new SockJS('http://100.86.210.52:8083/ws');
 //       const client = new Client({
 //         webSocketFactory: () => sockJS,
 //         connectHeaders: { matchId },
@@ -34,7 +34,7 @@
 //           });
 
 //           // Fetch chat history
-//           fetch(`http://localhost:8083/chat/history/${matchId}`)
+//           fetch(`http://100.86.210.52:8083/chat/history/${matchId}`)
 //             .then(response => {
 //               if (!response.ok) throw new Error('Failed to fetch history');
 //               return response.json();
@@ -82,7 +82,7 @@
 //     <div className="relative m-4"> {/* Added margin for visibility */}
 //       <button
 //         onClick={() => setIsOpen(!isOpen)}
-//         className="w-80 p-2 border border-[#393A4B] text-left pl-3 rounded-sm bg-[#151621] text-white 
+//         className="w-80 p-2 border border-[#393A4B] text-left pl-3 rounded-sm bg-[#151621] text-white
 //                   focus:outline-none flex justify-between items-center cursor-pointer"
 //       >
 //         Message a friend
@@ -104,7 +104,7 @@
 //             <div className="fixed bottom-20 right-4 w-96 bg-[#1f2136] rounded-lg shadow-xl p-4">
 //               <div className="flex justify-between items-center mb-4">
 //                 <h2 className="text-white text-xl font-bold">Group Chat</h2>
-//                 <button 
+//                 <button
 //                   onClick={() => setShowChat(false)}
 //                   className="text-gray-400 hover:text-white"
 //                 >
@@ -114,14 +114,14 @@
 
 //               <div className="h-64 overflow-y-auto mb-4">
 //                 {messages.map((msg, index) => (
-//                   <div 
+//                   <div
 //                     key={`msg-${index}`}
 //                     className={`mb-2 ${msg.sender === "currentUser" ? 'text-right' : 'text-left'}`}
 //                   >
-//                     <div 
+//                     <div
 //                       className={`inline-block p-2 rounded-lg ${
-//                         msg.sender === "currentUser" 
-//                           ? 'bg-blue-600 text-white' 
+//                         msg.sender === "currentUser"
+//                           ? 'bg-blue-600 text-white'
 //                           : 'bg-gray-700 text-white'
 //                       }`}
 //                     >

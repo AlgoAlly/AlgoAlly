@@ -22,9 +22,9 @@ const Login = () => {
 
     // send API request to login
     // get login host and port from environment variables
-    const host = import.meta.env.VITE_USER_API_HOST || 'http://127.0.0.1';
+    const host = import.meta.env.VITE_USER_API_HOST || 'http://100.86.210.52';
     const port = import.meta.env.VITE_USER_API_PORT || '14010';
-    const url = `${host}:${port}/login`;
+    const url = `${host}:${port}/token`;
     const data = {
       username: username,
       password: password,
@@ -32,6 +32,7 @@ const Login = () => {
 
     fetch(url, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -47,12 +48,13 @@ const Login = () => {
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('isLoggedIn', 'true');
             navigate('/');
+
+            // document.cookie = `acessToken=${data.accessToken}; path=/; secure; HttpOnly`;
           });
         } else {
-          // highlight the input fields red
           setUsername('');
           setPassword('');
-          // alert('Invalid username or password');
+          alert('Invalid username or password');
           document.querySelectorAll('input').forEach((input) => {
             input.style.outlineColor = 'red';
           });
@@ -60,6 +62,7 @@ const Login = () => {
       })
       .catch((error) => {
         console.error('Error:', error);
+        alert('Error logging in: ' + error);
         document.querySelectorAll('input').forEach((input) => {
           input.style.outlineColor = 'red';
         });
