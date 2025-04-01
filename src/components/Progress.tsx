@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import ProgressBar from "@ramonak/react-progress-bar";
+import { useState } from 'react';
+import ProgressBar from '@ramonak/react-progress-bar';
 
 const Progress = ( { username }) => {
     const [hoveredEasy, setHoveredEasy] = useState(false);

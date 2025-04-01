@@ -1,40 +1,88 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from 'react-router-dom';
+import Button from './Button';
+import Logo from '../public/logo.svg?react';
+import { sendAuthenticatedRequest } from '../util/util';
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const links = [
+    { name: 'Home', path: '/' },
+    { name: 'Play', path: '/game' },
+    { name: 'Problems', path: '/problems' },
+    { name: 'Friends', path: '/friends' },
+    { name: 'About', path: '/about' },
+    { name: 'Profile', path: '/profile' },
+  ];
+
+  const logout = () => {
+    // revoke the current refresh token
+    sendAuthenticatedRequest(
+      `${import.meta.env.VITE_USER_API_HOST}:${import.meta.env.VITE_USER_API_PORT}/logout`,
+      'POST',
+      localStorage.getItem('username')
+        ? { username: localStorage.getItem('username') }
+        : null
+    );
+
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('isLoggedIn');
+  };
+
   return (
-    <header className="sticky top-0 z-20 bg-[#191A23] text-white p-4 space-x-[161px] items-center justify-between border-b border-[#E0E1EC]/30">
-<nav className="flex space-x-[161px] items-center">
-      <NavLink
-        to="/problems"
-        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
-      >
-        Problems
-      </NavLink>
-      <NavLink
-        to="/friends"
-        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
-      >
-        Friends
-      </NavLink>
-      <NavLink
-        to="/about"
-        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
-      >
-        About
-      </NavLink>
-      <NavLink
-        to="/login"
-        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
-      >
-        Login
-      </NavLink>
-      <NavLink
-        to="/home"
-        className="text-primary text-[24px] hover:text-primary-hover hover:font-bold"
-      >
-        Home
-      </NavLink>
-      
+    <header className="border-border-primary sticky top-0 z-20 h-fit w-full items-center justify-between space-x-[161px] border-b p-4">
+      <nav className="flex w-full flex-row items-center justify-between">
+        <div className="flex items-center space-x-6">
+          <Logo className="h-10 w-10" fill="var(--color-text-primary)" />
+          {links.map(({ name, path }, i) => (
+            <NavLink
+              key={i}
+              to={path}
+              className="text-primary hover:text-primary-hover text-[18px] hover:font-bold"
+            >
+              {name}
+            </NavLink>
+          ))}
+        </div>
+        <div className="flex flex-row items-center space-x-4">
+          {localStorage.getItem('isLoggedIn') != 'true' ? (
+            <>
+              <Button
+                className="h-10"
+                variant="primary"
+                onClick={() => navigate('/signup')}
+              >
+                Sign Up
+              </Button>
+              <Button
+                className="h-10"
+                variant="primary"
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="text-primary text-[18px]">
+                {`Welcome, ${localStorage.getItem('username')}`}
+              </div>
+              <Button
+                className="h-10"
+                variant="primary"
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          )}
+        </div>
       </nav>
     </header>
   );

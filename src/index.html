@@ -8,6 +8,10 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Define 'global' for libraries that expect a Node.js-like global variable
+      window.global = window;
+    </script>
     <script type="module" src="./main.tsx"></script>
   </body>
 </html>
