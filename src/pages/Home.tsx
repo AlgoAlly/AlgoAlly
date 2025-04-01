@@ -1,4 +1,4 @@
-import React from 'react';
+import heroImage from '../public/heroimage.jpeg';
 import Navbar from '../components/Navbar';
 
 const Home = () => {
@@ -31,7 +31,7 @@ const Home = () => {
               </a>
 
               <a
-                href="#"
+                href="https://youtu.be/rZAcEhNNpnA"
                 title=""
                 className="font-pj border-border-primary mt-4 inline-flex w-full items-center justify-center rounded-xl border-2 px-6 py-3 text-lg font-bold transition-all duration-200 hover:border-gray-900 hover:bg-gray-900 hover:text-white focus:border-gray-900 focus:bg-gray-900 focus:text-white focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:outline-none sm:mt-0 sm:w-auto"
                 role="button"
@@ -66,11 +66,7 @@ const Home = () => {
             <div className="absolute inset-0 h-2/3"></div>
             <div className="relative mx-auto">
               <div className="lg:mx-auto lg:max-w-6xl">
-                <img
-                  className="scale-110 transform"
-                  src="/public/heroimage.jpeg"
-                  alt=""
-                />
+                <img className="scale-110 transform" src={heroImage} alt="" />
               </div>
             </div>
           </div>

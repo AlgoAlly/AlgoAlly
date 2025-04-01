@@ -20,6 +20,11 @@ export async function sendAuthenticatedRequest<T>(
       'Content-Type': 'application/json',
     },
     data,
+    validateStatus: () => {
+      // Accept all status codes
+      return true;
+    },
+    withCredentials: true,
   };
 
   try {

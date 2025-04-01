@@ -29,7 +29,8 @@ const Workspace: React.FC<WorkspaceProps> = ({
   useEffect(() => {
     // make request to the problem service
     const fetchProblem: () => Promise<void> = async () => {
-      const host = import.meta.env.VITE_PROBLEMS_API_HOST || 'http://localhost';
+      const host =
+        import.meta.env.VITE_PROBLEMS_API_HOST || 'http://100.86.210.52';
       const port = import.meta.env.VITE_PROBLEMS_API_PORT || '8080';
       // GET /problems/problemId
 

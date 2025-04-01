@@ -22,7 +22,7 @@ const Signup = () => {
     }
 
     try {
-      const host = import.meta.env.VITE_USER_API_HOST || 'http://localhost';
+      const host = import.meta.env.VITE_USER_API_HOST || 'http://100.86.210.52';
       const port = import.meta.env.VITE_USER_API_PORT || '14010';
 
       const response = await axios.post(
@@ -55,7 +55,7 @@ const Signup = () => {
       }
 
       const loginResponse = await axios.post(
-        `${host}:${port}/login`,
+        `${host}:${port}/token`,
         {
           username: username,
           password: password,
@@ -71,6 +71,7 @@ const Signup = () => {
         // highlight the input fields red
         setUsername('');
         setPassword('');
+        alert('Error logging in: ' + loginResponse.data);
         document.querySelectorAll('input').forEach((input) => {
           input.style.outlineColor = 'red';
         });

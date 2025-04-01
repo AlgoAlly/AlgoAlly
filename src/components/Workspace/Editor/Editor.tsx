@@ -45,7 +45,7 @@ const Editor: React.FC<EditorProps> = ({
 
   const submitProblem = async () => {
     // submit the code to the API
-    const host = import.meta.env.VITE_JUDGE0_API_HOST || 'http://localhost';
+    const host = import.meta.env.VITE_JUDGE0_API_HOST || 'http://100.86.210.52';
     const port = import.meta.env.VITE_JUDGE0_API_PORT || '8081';
 
     if (!localStorage.getItem('userId')) {
@@ -89,7 +89,7 @@ const Editor: React.FC<EditorProps> = ({
       const statusResponse = await axios.get<{
         status: number;
         errors?: string[];
-      }>(`${host}:${port}/status/${token}`, {
+      }>(`${host}:${port}/submit/${token}`, {
         validateStatus: () => {
           return true;
         },
@@ -111,13 +111,15 @@ const Editor: React.FC<EditorProps> = ({
         setSuccess(true);
         setSolved(true);
         console.log('Submission successful');
-
         return;
       } else if (statusResponse.data.status === 1) {
+        // {"status":1,"errors":["Wrong Answer"]}
         // the submission failed
         const errors = statusResponse.data.errors;
         console.log('Submission failed: ' + errors);
         // this should display this somewhere
+        alert('Submission failed: ' + errors);
+        return;
       }
     }
   };
@@ -134,7 +136,7 @@ const Editor: React.FC<EditorProps> = ({
         snapOffset={30}
         dragInterval={1}
         cursor="row-resize"
-        gutterStyle={(dimension, gutterSize, number) => {
+        gutterStyle={() => {
           // set the gutter to be the same color as the background
           return {
             backgroundColor: 'var(--color-border-primary)',
@@ -165,7 +167,7 @@ const Editor: React.FC<EditorProps> = ({
           </div>
 
           <div className="flex">
-            {problem.testcases.map((testcase, index) => (
+            {problem.testcases.map((_testcase, index) => (
               <div
                 className="mt-2 mr-2 items-start"
                 key={index}

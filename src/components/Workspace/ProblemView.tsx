@@ -80,7 +80,8 @@ const ProblemView: React.FC<ProblemViewProps> = ({
                 rehypePlugins={[rehypeKatex]}
                 remarkPlugins={[remarkMath, remarkBreaks]}
                 components={{
-                  code({ node, inline, className, children, ...props }) {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  code({ node, className, children, ...props }) {
                     return (
                       <pre
                         className={className}
