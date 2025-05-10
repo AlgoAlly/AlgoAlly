@@ -9,6 +9,8 @@ import Signup from './pages/Signup';
 import Workspace from './pages/Workspace';
 import Home from './pages/Home';
 import Game from './pages/Game';
+import Friends from './pages/Friends';
+import Navbar from "./components/Navbar";
 
 function App() {
     return (
@@ -21,6 +23,7 @@ function App() {
                 <Route path="/workspace" element={<Workspace />} />
                 <Route path="/game" element={<Game />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/friends" element={<Friends />} />
             </Routes>
         </>
     );
